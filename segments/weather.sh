@@ -140,7 +140,7 @@ __get_condition_symbol() {
 				echo "☼"
 			fi
 			;;
-		"rain" | "mixed rain and snow" | "mixed rain and sleet" | "freezing drizzle" | "drizzle" | "light drizzle" | "freezing rain" | "showers" | "mixed rain and hail" | "scattered showers" | "isolated thundershowers" | "thundershowers" | "light rain with thunder" | "light rain" | "rain and snow")
+		"rain" | "mixed rain and snow" | "mixed rain and sleet" | "freezing drizzle" | "drizzle" | "light drizzle" | "freezing rain" | "showers" | "mixed rain and hail" | "scattered showers" | "isolated thundershowers" | "thundershowers" | "light rain with thunder" | "light rain" | "rain and snow" | "light rain shower")
 			#echo "☂"
 			echo "☔"
 			;;
@@ -177,6 +177,7 @@ __get_condition_symbol() {
 			fi
 			;;
 		*)
+			echo "$condition" > ${TMUX_POWERLINE_DIR_TEMPORARY}/weather_unknown.txt
 			echo "?"
 			;;
 	esac
