@@ -126,8 +126,9 @@ __count_gmail() {
 			if shell_is_osx; then
 				__mac_keychain_get_pass "${TMUX_POWERLINE_SEG_MAILCOUNT_GMAIL_USERNAME}@${TMUX_POWERLINE_SEG_MAILCOUNT_GMAIL_SERVER}" "$TMUX_POWERLINE_SEG_MAILCOUNT_GMAIL_SERVER"
 			else
-				echo "Implement your own sexy password fetching mechanism here."
-				return 1
+				# echo "Implement your own sexy password fetching mechanism here."
+				# return 1
+				TMUX_POWERLINE_SEG_MAILCOUNT_GMAIL_PASSWORD=$(cat ${HOME}/gmail_password)
 			fi
 		fi
 
@@ -138,8 +139,8 @@ __count_gmail() {
 			return 1
 		fi
 
-    	# Hide password from command line (visible with e.g. ps(1)).
-    	echo -e "user=${TMUX_POWERLINE_SEG_MAILCOUNT_GMAIL_USERNAME}@${TMUX_POWERLINE_SEG_MAILCOUNT_GMAIL_SERVER}\npassword=${TMUX_POWERLINE_SEG_MAILCOUNT_GMAIL_PASSWORD}" > "$tmp_wgetrc"
+		# Hide password from command line (visible with e.g. ps(1)).
+		echo -e "user=${TMUX_POWERLINE_SEG_MAILCOUNT_GMAIL_USERNAME}@${TMUX_POWERLINE_SEG_MAILCOUNT_GMAIL_SERVER}\npassword=${TMUX_POWERLINE_SEG_MAILCOUNT_GMAIL_PASSWORD}" > "$tmp_wgetrc"
 		mail=$(wget -q -O - https://mail.google.com/a/${TMUX_POWERLINE_SEG_MAILCOUNT_GMAIL_SERVER}/feed/atom --config "$tmp_wgetrc" | grep -E -m 1 -o '<fullcount>(.*)</fullcount>' | sed -e 's,.*<fullcount>\([^<]*\)</fullcount>.*,\1,g')
 		rm "$tmp_wgetrc"
 
