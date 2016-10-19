@@ -3,6 +3,7 @@
 TMUX_POWERLINE_SEG_STORAGE_BOOT_PATTERN_DEFAULT="boot"
 TMUX_POWERLINE_SEG_STORAGE_ROOT_PATTERN_DEFAULT="ROOT"
 TMUX_POWERLINE_SEG_STORAGE_HOME_PATTERN_DEFAULT="home"
+TMUX_POWERLINE_SEG_STORAGE_DELIMITER_DEFAULT=""
 DEFAULT_ROOT_PATTERN="\$6 == \"/\""
 
 generate_segmentrc() {
@@ -16,6 +17,8 @@ export TMUX_POWERLINE_SEG_STORAGE_ROOT_PATTERN="${TMUX_POWERLINE_SEG_STORAGE_ROO
 # Home partition pattern
 export TMUX_POWERLINE_SEG_STORAGE_HOME_PATTERN="${TMUX_POWERLINE_SEG_STORAGE_HOME_PATTERN_DEFAULT}"
 # Can be "NONE" if not needed.
+# Delimiter character
+export TMUX_POWERLINE_SEG_STORAGE_DELIMITER="${TMUX_POWERLINE_SEG_STORAGE_DELIMITER_DEFAULT}"
 
 EORC
     echo "$rccontents"
@@ -31,20 +34,20 @@ get_data() {
         res = res boot
         if (root) {
             if (res) {
-                res = res \" | \" root
+                res = res \" $TMUX_POWERLINE_SEG_STORAGE_DELIMITER \" root
             } else {
                 res = root
             }
         }
         if (home) {
             if (res) {
-                res = res \" | \" home
+                res = res \" $TMUX_POWERLINE_SEG_STORAGE_DELIMITER \" home
             } else {
                 res = home
             }
         }
         print res
-        # print boot, \"|\", root, \"|\", home
+        # print boot, \"$TMUX_POWERLINE_SEG_STORAGE_DELIMITER\", root, \"$TMUX_POWERLINE_SEG_STORAGE_DELIMITER\", home
     }
     "
 }
