@@ -1,8 +1,9 @@
 # Print the storage capacity of the file system.
 
 TMUX_POWERLINE_SEG_STORAGE_BOOT_PATTERN_DEFAULT="boot"
-TMUX_POWERLINE_SEG_STORAGE_ROOT_PATTERN_DEFAULT="NONE"
+TMUX_POWERLINE_SEG_STORAGE_ROOT_PATTERN_DEFAULT="ROOT"
 TMUX_POWERLINE_SEG_STORAGE_HOME_PATTERN_DEFAULT="home"
+DEFAULT_ROOT_PATTERN="\$6 == \"/\""
 
 generate_segmentrc() {
     read -d '' rccontents  << EORC
@@ -23,7 +24,7 @@ EORC
 get_data() {
     df -h | awk "
     /$TMUX_POWERLINE_SEG_STORAGE_BOOT_PATTERN/ { boot = \$4 }
-    /$TMUX_POWERLINE_SEG_STORAGE_ROOT_PATTERN/ { root = \$4 \"/\" \$2 }
+    $TMUX_POWERLINE_SEG_STORAGE_ROOT_PATTERN { root = \$4 \"/\" \$2 }
     /$TMUX_POWERLINE_SEG_STORAGE_HOME_PATTERN/ { home = \$4 \"/\" \$2 }
     END {
         res = \"\"
@@ -49,6 +50,11 @@ get_data() {
 }
 
 run_segment() {
+    if [ "$TMUX_POWERLINE_SEG_STORAGE_ROOT_PATTERN" == "ROOT" ]; then
+        TMUX_POWERLINE_SEG_STORAGE_ROOT_PATTERN="$DEFAULT_ROOT_PATTERN"
+    else
+        TMUX_POWERLINE_SEG_STORAGE_ROOT_PATTERN="/$TMUX_POWERLINE_SEG_STORAGE_ROOT_PATTERN/"
+    fi
     get_data | head -1 # usefull for debugging purposes
     exit 0
 }
