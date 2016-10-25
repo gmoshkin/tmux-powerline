@@ -51,7 +51,7 @@ if [ -z $TMUX_POWERLINE_RIGHT_STATUS_SEGMENTS ]; then
 		"battery 1 15" \
 		# "rainbarf 0 0" \
 		"xkb_layout 6 15" \
-		"sound_volume 2 15" \
+		# "sound_volume 2 15" \
 		"currency 5 15"
 		"date_day 10 15" \
 		"date 10 15 ${TMUX_POWERLINE_SEPARATOR_LEFT_THIN}" \
