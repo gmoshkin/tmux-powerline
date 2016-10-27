@@ -24,14 +24,14 @@ TMUX_POWERLINE_DEFAULT_TRUNCATION=${TMUX_POWERLINE_DEFAULT_TRUNCATION:-'170'}
 
 if [ -z $TMUX_POWERLINE_LEFT_STATUS_SEGMENTS ]; then
 	TMUX_POWERLINE_LEFT_STATUS_SEGMENTS=(
-		"session_width 0 15"
-		"tmux_session_info 10 15" \
-		"hostname 4 15" \
+		"session_width 0 15 0"
+		"tmux_session_info 10 15 50" \
+		"hostname 4 15 50" \
 		# "ifstat 30 255" \
 		# "ifstat_sys 30 255" \
-		"lan_ip 12 15 ${TMUX_POWERLINE_SEPARATOR_RIGHT_THIN}" \
-		"wan_ip 12 15" \
-		"vcs_branch 4 15" \
+		"lan_ip 12 15 ${TMUX_POWERLINE_SEPARATOR_RIGHT_THIN} 150" \
+		"wan_ip 12 15 150" \
+		"vcs_branch 4 15 140" \
 		"vcs_compare 5 15" \
 		"vcs_staged 2 15" \
 		"vcs_modified 9 15" \
@@ -42,7 +42,7 @@ fi
 if [ -z $TMUX_POWERLINE_RIGHT_STATUS_SEGMENTS ]; then
 	TMUX_POWERLINE_RIGHT_STATUS_SEGMENTS=(
 		#"earthquake 3 0" \
-		"mailcount 1 15" \
+		"mailcount 1 15 90" \
 		# "pwd 12 15" \
 		"now_playing 8 6" \
 		# "cpu 240 136" \
@@ -50,14 +50,14 @@ if [ -z $TMUX_POWERLINE_RIGHT_STATUS_SEGMENTS ]; then
 		"load 8 15" \
 		# "tmux_mem_cpu_load 234 136" \
 		"weather 4 15" \
-		"battery 1 15" \
+		"battery 1 15 80" \
 		# "rainbarf 0 0" \
-		"xkb_layout 6 15" \
+		"xkb_layout 6 15 80" \
 		# "sound_volume 2 15" \
 		"currency 5 15"
-		"date_day 10 15" \
-		"date 10 15 ${TMUX_POWERLINE_SEPARATOR_LEFT_THIN}" \
-		"time 10 15 ${TMUX_POWERLINE_SEPARATOR_LEFT_THIN}" \
+		"date_day 10 15 50" \
+		"date 10 15 ${TMUX_POWERLINE_SEPARATOR_LEFT_THIN} 50" \
+		"time 10 15 ${TMUX_POWERLINE_SEPARATOR_LEFT_THIN} 50" \
 		# "utc_time 235 136 ${TMUX_POWERLINE_SEPARATOR_LEFT_THIN}" \
 	)
 fi
