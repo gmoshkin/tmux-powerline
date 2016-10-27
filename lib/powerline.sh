@@ -21,11 +21,26 @@ __process_segment_defaults() {
 		local input_segment=(${input_segments[$segment_index]})
 		eval "local default_separator=\$TMUX_POWERLINE_DEFAULT_${upper_side}SIDE_SEPARATOR"
 
+		local re='^[0-9]+$'
+
+		local script="${input_segment[0]:-"no_script"}"
+		local bg_color="${input_segment[1]:-$TMUX_POWERLINE_DEFAULT_BACKGROUND_COLOR}"
+		local fg_color="${input_segment[2]:-$TMUX_POWERLINE_DEFAULT_FOREGROUND_COLOR}"
+		local separator
+		local truncation
+		if [[ ${input_segment[3]} =~ $re ]]; then
+			separator=${default_separator}
+			truncation=${input_segment[3]}
+		else
+			separator=${input_segment[3]:-$default_separator}
+			truncation=${input_segment[4]:-$TMUX_POWERLINE_DEFAULT_TRUNCATION}
+		fi
 		powerline_segment_with_defaults=(
-			${input_segment[0]:-"no_script"} \
-			${input_segment[1]:-$TMUX_POWERLINE_DEFAULT_BACKGROUND_COLOR} \
-			${input_segment[2]:-$TMUX_POWERLINE_DEFAULT_FOREGROUND_COLOR} \
-			${input_segment[3]:-$default_separator} \
+			${script} \
+			${bg_color} \
+			${fg_color} \
+			${separator} \
+			${truncation}
 		)
 
 		powerline_segments[$segment_index]="${powerline_segment_with_defaults[@]}"
@@ -42,11 +57,19 @@ __process_scripts() {
 			local script="$TMUX_POWERLINE_DIR_SEGMENTS/${powerline_segment[0]}.sh"
 		fi
 
+		local truncation="${powerline_segment[4]}"
+		local session_width=$(tmux display-message -p '#{session_width}')
+
 		export TMUX_POWERLINE_CUR_SEGMENT_BG="${powerline_segment[1]}"
 		export TMUX_POWERLINE_CUR_SEGMENT_FG="${powerline_segment[2]}"
+		export TMUX_POWERLINE_CUR_SEGMENT_TRUNCATION="${truncation}"
+		export TMUX_POWERLINE_SESSION_WIDTH="${session_width}"
 		source "$script"
 		local output
 		output=$(run_segment)
+		if [ $truncation -ge $session_width ]; then
+			output=""
+		fi
 		local exit_code="$?"
 		unset -f run_segment
 
