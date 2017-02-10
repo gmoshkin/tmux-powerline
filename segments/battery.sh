@@ -5,6 +5,9 @@ TMUX_POWERLINE_SEG_BATTERY_NUM_HEARTS_DEFAULT=5
 
 HEART_FULL="♥"
 HEART_EMPTY="♡"
+CHARGING_INDICATOR="⚡"
+DISCHARGING_INDICATOR="$HEART_FULL"
+UNKNOWN_INDICATOR="?"
 
 generate_segmentrc() {
 	read -d '' rccontents  << EORC
@@ -31,6 +34,10 @@ run_segment() {
 			;;
 		"cute")
 			output=$(__cutinate $battery_status)
+			;;
+		"indicator")
+			output="$(__indicator $battery_status `__battery_linux status`)"
+			;;
 	esac
 	if [ -n "$output" ]; then
 		echo "$output"
@@ -99,6 +106,8 @@ __battery_osx() {
 
 				if [ "$1" = `cat $STATUS` -o "$1" = "" ]; then
 					__linux_get_bat
+				elif [ "$1" = "status" ]; then
+					echo "`cat $STATUS`"
 				fi
 				;;
 			"bsd")
@@ -118,6 +127,22 @@ __battery_osx() {
 						__freebsd_get_bat
 						;;
 				esac
+				;;
+		esac
+	}
+
+	__indicator() {
+		perc=$1
+		status=$2
+		case $2 in
+			"Discharging")
+				echo "${DISCHARGING_INDICATOR} $perc"
+				;;
+			"Charging")
+				echo "${CHARGING_INDICATOR} $perc"
+				;;
+			"*")
+				echo "${UNKNOWN_INDICATOR} $perc"
 				;;
 		esac
 	}
