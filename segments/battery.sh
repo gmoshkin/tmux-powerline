@@ -141,7 +141,7 @@ __battery_osx() {
 			"Charging")
 				echo "${CHARGING_INDICATOR} $perc"
 				;;
-			"*")
+			*)
 				echo "${UNKNOWN_INDICATOR} $perc"
 				;;
 		esac
