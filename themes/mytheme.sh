@@ -47,9 +47,9 @@ if [ -z $TMUX_POWERLINE_RIGHT_STATUS_SEGMENTS ]; then
 		#"earthquake 3 0" \
 		"mailcount 1 15 90" \
 		# "pwd 12 15" \
-		"now_playing 8 6" \
 		# "cpu 240 136" \
 		"storage 12 15" \
+		"now_playing 13 15" \
 		"load 8 15" \
 		# "tmux_mem_cpu_load 234 136" \
 		"weather 4 15" \
