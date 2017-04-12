@@ -206,7 +206,8 @@ __np_cmus() {
 			}
 		'
 	)
-	np=${res/#*@/}
+	np_with_a_space_on_the_end=${res/#*@/}
+	np=${np_with_a_space_on_the_end:0:-1}
 	status=${res/%@*/}
 	if [[ "$status" == *playing* ]]; then
 		echo "$np"
