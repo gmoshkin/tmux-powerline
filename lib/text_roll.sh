@@ -29,7 +29,7 @@ roll_text() {
 
 	# Anything starting with 0 is an Octal number in Shell,C or Perl,
 	# so we must explicitly state the base of a number using base#number
-	local offset=$((10#$(date +%s) * ${speed} % ${#text}))
+    local offset=$((10#$(date +%s) * ${speed} % (${#text} - ${max_len} + 1)))
 
 	# Truncate text.
 	text=${text:offset}
