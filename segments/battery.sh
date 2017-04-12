@@ -19,6 +19,10 @@ EORC
 	echo "$rccontents"
 }
 
+__log() {
+	echo "$@" > "${TMUX_POWERLINE_DIR_TEMPORARY}/battery_status.txt"
+}
+
 run_segment() {
 	__process_settings
 	if shell_is_osx; then
@@ -143,6 +147,7 @@ __battery_osx() {
 				;;
 			*)
 				echo "${UNKNOWN_INDICATOR} $perc"
+				__log "Unknown status indicator: '$2'"
 				;;
 		esac
 	}
