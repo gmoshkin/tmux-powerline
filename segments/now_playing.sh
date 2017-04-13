@@ -185,26 +185,68 @@ __np_banshee() {
 	fi
 }
 
+__np_parse_cmus_output() {
+	awk -e '
+		$2 == "artist" {
+			artist = "";
+			for ( i = 3; i <=NF; i++ )
+				artist = artist $i " ";
+		}
+		$2 == "title" {
+			title = "";
+			for ( i = 3; i <=NF; i++ )
+				title = title $i " ";
+		}
+		$1 == "status" {
+			status = $2
+		}
+		END {
+			print status "@" artist "- " title
+		}
+	'
+}
+
 __np_cmus_now_playing() {
-	cmus-remote -Q |
-		awk -e '
-			$2 == "artist" {
-				artist = "";
-				for ( i = 3; i <=NF; i++ )
-					artist = artist $i " ";
-			}
-			$2 == "title" {
-				title = "";
-				for ( i = 3; i <=NF; i++ )
-					title = title $i " ";
-			}
-			$1 == "status" {
-				status = $2
-			}
-			END {
-				print status "@" artist "- " title
-			}
-		'
+	cmus-remote -Q | __np_parse_cmus_output
+}
+
+__read_tmp_file() {
+	if [ ! -f "$tmp_file" ]; then
+		return
+	fi
+	head -1 "${tmp_file}"
+	exit
+}
+
+__np_cmus_remote() {
+	local tmp_file="${TMUX_POWERLINE_DIR_TEMPORARY}/cmus_remote.txt"
+	local period="$TMUX_POWERLINE_SEG_NOW_PLAYING_CMUS_REMOTE_UPDATE_PERIOD"
+	if [ -z "$period" -o "$period" -eq 0 ]; then
+		exit
+	fi
+	if [ -f "$tmp_file" ]; then
+		if shell_is_osx || shell_is_bsd; then
+			local last_update=$(stat -f "%m" ${tmp_file})
+		elif shell_is_linux; then
+			local last_update=$(stat -c "%Y" ${tmp_file})
+		fi
+		local time_now=$(date +%s)
+
+		local up_to_date=$(echo "(${time_now}-${last_update}) < ${period}" | bc)
+		if [ "$up_to_date" -eq 1 ]; then
+			__read_tmp_file
+		fi
+	fi
+
+	local host="$TMUX_POWERLINE_SEG_NOW_PLAYING_CMUS_REMOTE_HOST"
+	if [ -z "$host" ]; then
+		exit
+	fi
+
+	local res=$(echo "cmus-remote -Q" | ssh "$host" | __np_parse_cmus_output)
+	echo $res > "$tmp_file"
+	echo $(date) >> "$tmp_file"
+	echo $res
 }
 
 __np_cmus_settings() {
@@ -262,6 +304,9 @@ __np_cmus() {
 			;;
 		settings )
 			res=$(__np_cmus_settings)
+			;;
+		remote )
+			res=$(__np_cmus_remote)
 			;;
 		* )
 			res=$(__np_cmus_now_playing)
