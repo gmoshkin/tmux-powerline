@@ -27,6 +27,7 @@ TMUX_POWERLINE_DEFAULT_TRUNCATION=${TMUX_POWERLINE_DEFAULT_TRUNCATION:-'170'}
 
 if [ -z $TMUX_POWERLINE_LEFT_STATUS_SEGMENTS ]; then
 	TMUX_POWERLINE_LEFT_STATUS_SEGMENTS=(
+		"mode_indicator"
 		# "session_width 0 15 0"
 		"tmux_session_info 10 15 50" \
 		"hostname 4 15 50" \

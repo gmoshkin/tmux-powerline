@@ -1,19 +1,19 @@
 # Indicator of pressing TMUX prefix, copy and insert modes.
 
-prefix_pressed_text="PREFIX PRESSED"
-insert_mode_text="INSERT"
-copy_mode_text="COPY"
-normal_mode_text="NORMAL"
-separator="✤"
+PREFIX="◉"
+INSERT=" "
+COPY=""
+NORM=" "
+SEP=" "
 
-prefix_mode_fg="colour226"
-normal_mode_fg="colour16"
-copy_mode_fg="colour82"
-bg="colour33"
+PREFIX_FG="colour4"
+NORM_FG="colour0"
+COPY_FG="colour5"
+bg="colour0"
 
 run_segment() {
-        prefix_indicator="#[bg=${bg}]#{?client_prefix,#[fg=${prefix_mode_fg}]${prefix_pressed_text},#[fg=${normal_mode_fg}]${normal_mode_text}}"
-        normal_or_copy_indicator="#[bg=${bg}]#{?pane_in_mode,#[fg=${copy_mode_fg}]${copy_mode_text},#[fg=${normal_mode_fg}]${insert_mode_text}}";
-        echo $prefix_indicator "#[fg=${normal_mode_fg}]${separator}" $normal_or_copy_indicator
-        return 0
+    prefix_indicator="#{?client_prefix,#[fg=${PREFIX_FG}]${PREFIX},#[fg=${NORM_FG}]${NORM}}"
+    mode_indicator="#{?pane_in_mode,#[fg=${COPY_FG}]${COPY},${INSERT}}"
+    echo $prefix_indicator"#[fg=${NORM_FG}]${SEP}"$mode_indicator""
+    return 0
 }
