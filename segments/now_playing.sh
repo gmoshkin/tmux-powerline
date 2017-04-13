@@ -147,8 +147,8 @@ __np_mpd() {
 
 __np_file() {
 
-        np=$(cat $TMUX_POWERLINE_SEG_NOW_PLAYING_FILE_NAME | tr '\n' '|')
-        echo "$np"
+	np=$(cat $TMUX_POWERLINE_SEG_NOW_PLAYING_FILE_NAME | tr '\n' '|')
+	echo "$np"
 }
 
 
@@ -185,8 +185,8 @@ __np_banshee() {
 	fi
 }
 
-__np_cmus() {
-	res=$(cmus-remote -Q |
+__np_cmus_now_playing() {
+	cmus-remote -Q |
 		awk -e '
 			$2 == "artist" {
 				artist = "";
@@ -205,7 +205,68 @@ __np_cmus() {
 				print status "@" artist "- " title
 			}
 		'
-	)
+}
+
+__np_cmus_settings() {
+	tmp=$(cmus-remote -C "set follow?")
+	if [[ "$tmp" == *true* ]]; then
+		follow="F"
+	else
+		follow=" "
+	fi
+	cmus-remote -Q |
+		awk -e '
+			$2 == "repeat_current" {
+				rep_cur = ($3 == "true");
+			}
+			$2 == "play_library" {
+				lib = ($3 == "true");
+			}
+			$2 == "play_sorted" {
+				sort = ($3 == "true") ? ("sorted ") : ("");
+			}
+			$2 == "aaa_mode" {
+				aaa = $3;
+			}
+			$2 == "continue" {
+				cont = ($3 == "true") ? ("C") : (" ");
+			}
+			$2 == "repeat" {
+				rep = ($3 == "true") ? ("R") : (" ");
+			}
+			$2 == "shuffle" {
+				shuf = ($3 == "true") ? ("S") : (" ");
+			}
+			$1 == "status" {
+				status = $2
+			}
+			END {
+				if ( rep_cur ) {
+					left = "repeat current"
+				} else if ( lib ) {
+					left = aaa " " sort "lib"
+				} else {
+					left = "playlist"
+				}
+				right = cont "'"$follow"'" rep shuf
+				print status "@" left "|", right " "
+			}
+		' 2> "$TMUX_POWERLINE_DIR_TEMPORARY/cmus_debug.txt"
+}
+
+__np_cmus() {
+	mode=$(cat "$TMUX_POWERLINE_DIR_TEMPORARY"/cmus_mode.txt 2>/dev/null)
+	case "$mode" in
+		now_playing )
+			res=$(__np_cmus_now_playing)
+			;;
+		settings )
+			res=$(__np_cmus_settings)
+			;;
+		* )
+			res=$(__np_cmus_now_playing)
+			;;
+	esac
 	np_with_a_space_on_the_end=${res/#*@/}
 	np=${np_with_a_space_on_the_end:0:-1}
 	status=${res/%@*/}
