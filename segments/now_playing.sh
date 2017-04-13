@@ -188,17 +188,17 @@ __np_banshee() {
 __np_cmus() {
 	res=$(cmus-remote -Q |
 		awk -e '
-			/artist/ {
+			$2 == "artist" {
 				artist = "";
 				for ( i = 3; i <=NF; i++ )
 					artist = artist $i " ";
 			}
-			/title/ {
+			$2 == "title" {
 				title = "";
 				for ( i = 3; i <=NF; i++ )
 					title = title $i " ";
 			}
-			/status/ {
+			$1 == "status" {
 				status = $2
 			}
 			END {
