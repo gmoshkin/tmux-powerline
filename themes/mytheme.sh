@@ -14,7 +14,11 @@ fi
 
 __current_status_style=$(tmux show-options -g status-bg)
 __current_bg_color=$(expr "$__current_status_style" : '.*bg=\([a-zA-Z0-9]*\)')
-__current_bg_color_num=${__current_bg_color/#colour/}
+if [ "$__current_bg_color" == "black" ]; then
+	__current_bg_color_num=0
+else
+	__current_bg_color_num=${__current_bg_color/#colour/}
+fi
 TMUX_POWERLINE_DEFAULT_BACKGROUND_COLOR=$__current_bg_color_num
 TMUX_POWERLINE_DEFAULT_FOREGROUND_COLOR=${TMUX_POWERLINE_DEFAULT_FOREGROUND_COLOR:-'7'}
 
