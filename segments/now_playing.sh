@@ -310,9 +310,6 @@ __np_cmus() {
 		settings )
 			res=$(__np_cmus_settings)
 			;;
-		remote )
-			res=$(__np_cmus_remote)
-			;;
 		* )
 			res=$(__np_cmus_now_playing)
 			;;
