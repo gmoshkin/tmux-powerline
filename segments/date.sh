@@ -30,7 +30,7 @@ __process_settings() {
 
 run_segment() {
 		__process_settings
-	if [ $TMUX_POWERLINE_SESSION_WIDTH -g "$TMUX_POWERLINE_SEG_DATE_TRESHOLD" ]; then
+	if [ "$TMUX_POWERLINE_SESSION_WIDTH" -gt "$TMUX_POWERLINE_SEG_DATE_TRESHOLD" ]; then
 		date +"$TMUX_POWERLINE_SEG_DATE_FORMAT"
 	else
 		date +"$TMUX_POWERLINE_SEG_DATE_FORMAT_BACKUP"
