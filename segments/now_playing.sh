@@ -11,6 +11,7 @@ TMUX_POWERLINE_SEG_NOW_PLAYING_LASTFM_UPDATE_PERIOD_DEFAULT="30"
 TMUX_POWERLINE_SEG_NOW_PLAYING_MPD_SIMPLE_FORMAT_DEFAULT="%artist% - %title%"
 TMUX_POWERLINE_SEG_NOW_PLAYING_RHYTHMBOX_FORMAT_DEFAULT="%aa - %tt"
 TMUX_POWERLINE_SEG_NOW_PLAYING_NOTE_CHAR_DEFAULT="♫"
+TMUX_POWERLINE_SEG_NOW_PLAYING_CMUS_TIMEOUT_DEFAULT="0.1s"
 
 generate_segmentrc() {
 	read -d '' rccontents  << EORC
@@ -40,6 +41,9 @@ export TMUX_POWERLINE_SEG_NOW_PLAYING_LASTFM_USERNAME=""
 export TMUX_POWERLINE_SEG_NOW_PLAYING_LASTFM_UPDATE_PERIOD="${TMUX_POWERLINE_SEG_NOW_PLAYING_LASTFM_UPDATE_PERIOD_DEFAULT}"
 # Fancy char to display before now playing track
 export TMUX_POWERLINE_SEG_NOW_PLAYING_NOTE_CHAR="${TMUX_POWERLINE_SEG_NOW_PLAYING_NOTE_CHAR_DEFAULT}"
+
+# Timeout for cmus-remote
+export TMUX_POWERLINE_SEG_NOW_PLAYING_CMUS_TIMEOUT="${TMUX_POWERLINE_SEG_NOW_PLAYING_CMUS_TIMEOUT_DEFAULT}"
 EORC
 	echo "$rccontents"
 }
@@ -208,7 +212,7 @@ __np_parse_cmus_output() {
 
 __cmus-remote() {
 	local cmus_addr=${CMUS_ADDR:-0.0.0.0}
-	cmus-remote --server $cmus_addr --passwd ${CMUS_PWD} $@
+	timeout $TMUX_POWERLINE_SEG_NOW_PLAYING_CMUS_TIMEOUT cmus-remote --server $cmus_addr --passwd ${CMUS_PWD} $@
 }
 __np_cmus_now_playing() {
 	__cmus-remote -Q | __np_parse_cmus_output
