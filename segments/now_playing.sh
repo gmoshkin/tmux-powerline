@@ -211,8 +211,8 @@ __np_parse_cmus_output() {
 }
 
 __cmus-remote() {
-	local cmus_addr=${CMUS_ADDR:-0.0.0.0}
-	timeout $TMUX_POWERLINE_SEG_NOW_PLAYING_CMUS_TIMEOUT cmus-remote --server $cmus_addr --passwd ${CMUS_PWD} $@
+	local cmus_addr=${CMUS_ADDR:-${XDG_RUNTIME_DIR}/cmus-socket}
+	timeout $TMUX_POWERLINE_SEG_NOW_PLAYING_CMUS_TIMEOUT cmus-remote --server "$cmus_addr" --passwd "${CMUS_PWD}" $@
 }
 __np_cmus_now_playing() {
 	__cmus-remote -Q | __np_parse_cmus_output
@@ -252,7 +252,7 @@ __np_cmus_remote() {
 	fi
 
 	#FIXME
-	local res=$(echo "cmus-remote --server $host --passwd ${CMUS_PWD} -Q" | __np_parse_cmus_output)
+	local res=$(echo "cmus-remote --server $host --passwd \"${CMUS_PWD}\" -Q" | __np_parse_cmus_output)
 	echo $res > "$tmp_file"
 	echo $(date) >> "$tmp_file"
 	echo $res
