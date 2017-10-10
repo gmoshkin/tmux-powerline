@@ -1,6 +1,6 @@
 # Indicator of pressing TMUX prefix, copy and insert modes.
 
-PREFIX="◉"
+PREFIX="☹"
 INSERT=" "
 COPY=""
 NORM=" "
