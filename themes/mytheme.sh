@@ -13,7 +13,7 @@ else
 fi
 
 __current_status_style=$(tmux show-options -g status-bg)
-__current_bg_color=$(expr "$__current_status_style" : '.*bg=\([a-zA-Z0-9]*\)')
+__current_bg_color=$(expr "$__current_status_style" : '.*bg[ =]\([a-zA-Z0-9]*\)')
 if [ "$__current_bg_color" == "black" ]; then
 	__current_bg_color_num=0
 else
