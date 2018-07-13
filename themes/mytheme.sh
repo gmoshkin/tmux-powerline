@@ -44,6 +44,7 @@ if [ -z $TMUX_POWERLINE_LEFT_STATUS_SEGMENTS ]; then
 		"vcs_staged 2 15" \
 		"vcs_modified 9 15" \
 		"vcs_others 12 0" \
+		"load 8 15" \
 	)
 fi
 
@@ -56,7 +57,6 @@ if [ -z $TMUX_POWERLINE_RIGHT_STATUS_SEGMENTS ]; then
 		# "cpu 240 136" \
 		"storage 9 15" \
 		"now_playing 13 15" \
-		"load 8 15" \
 		# "tmux_mem_cpu_load 234 136" \
 		"weather 4 15" \
 		"battery 1 15 80" \
