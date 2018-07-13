@@ -50,6 +50,7 @@ fi
 if [ -z $TMUX_POWERLINE_RIGHT_STATUS_SEGMENTS ]; then
 	TMUX_POWERLINE_RIGHT_STATUS_SEGMENTS=(
 		#"earthquake 3 0" \
+		"tg 4 15 90" \
 		"mailcount 1 15 90" \
 		# "pwd 12 15" \
 		# "cpu 240 136" \
