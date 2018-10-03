@@ -19,7 +19,7 @@ get_new_tmux_cwd() {
 get_tmux_cwd() {
 	local tmux_version="$(tmux -V | cut -d' ' -f2)"
 	local res=$(echo "$tmux_version < 2.1" | bc)
-	if [ "$res" -eq 0 ]; then
+	if [ "$res" -eq 0 -o "$tmux_version" = 'master' ]; then
 		get_new_tmux_cwd
 	else
 		get_old_tmux_cwd
