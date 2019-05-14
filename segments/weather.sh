@@ -39,6 +39,13 @@ run_segment() {
 	local weather
 	case "$TMUX_POWERLINE_SEG_WEATHER_DATA_PROVIDER" in
 		"yahoo") weather=$(__yahoo_weather) ;;
+		"wttr.in")
+			weather=$(__check_tmp_file)
+			if [ -z "$weather" ]; then
+				weather=$(curl 'wttr.in/Moscow?format=1')
+				echo $weather > "${tmp_file}"
+			fi
+			;;
 		*)
 			echo "Unknown weather provider [${$TMUX_POWERLINE_SEG_WEATHER_DATA_PROVIDER}]";
 			return 1
@@ -67,8 +74,7 @@ __process_settings() {
 	fi
 }
 
-__yahoo_weather() {
-	degree=""
+__check_tmp_file() {
 	if [ -f "$tmp_file" ]; then
 		if shell_is_osx || shell_is_bsd; then
 			last_update=$(stat -f "%m" ${tmp_file})
@@ -82,6 +88,11 @@ __yahoo_weather() {
 			__read_tmp_file
 		fi
 	fi
+}
+
+__yahoo_weather() {
+	degree=""
+	__check_tmp_file
 
 	if [ -z "$degree" ]; then
 		weather_data=$(curl --max-time 4 -s "https://query.yahooapis.com/v1/public/yql?format=xml&q=SELECT%20*%20FROM%20weather.forecast%20WHERE%20u=%27${TMUX_POWERLINE_SEG_WEATHER_UNIT}%27%20AND%20woeid%20=%20%27${TMUX_POWERLINE_SEG_WEATHER_LOCATION}%27")
@@ -130,7 +141,7 @@ __get_condition_symbol() {
 	local sunrise="$2"
 	local sunset="$3"
 	case "$condition" in
-		"sunny" | "hot")
+		*"sunny"* | "hot")
 			hourmin=$(date +%H%M)
 			if [ "$hourmin" -ge "$sunset" -o "$hourmin" -le "$sunrise" ]; then
 				#echo "☽"
