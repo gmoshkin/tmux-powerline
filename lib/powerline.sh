@@ -58,7 +58,7 @@ __process_scripts() {
 		fi
 
 		local truncation="${powerline_segment[4]}"
-		local session_width=$(tmux display-message -p '#{session_width}')
+		local session_width=$(tmux display-message -p '#{window_width}#{session_width}')
 
 		export TMUX_POWERLINE_CUR_SEGMENT_BG="${powerline_segment[1]}"
 		export TMUX_POWERLINE_CUR_SEGMENT_FG="${powerline_segment[2]}"
