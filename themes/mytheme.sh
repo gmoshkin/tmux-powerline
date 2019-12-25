@@ -52,13 +52,13 @@ if [ -z $TMUX_POWERLINE_RIGHT_STATUS_SEGMENTS ]; then
 	TMUX_POWERLINE_RIGHT_STATUS_SEGMENTS=(
 		#"earthquake 3 0" \
 		"tg 4 15 90" \
-		"mailcount 1 15 90" \
+		"fastmail 1 15 90" \
 		# "pwd 12 15" \
 		# "cpu 240 136" \
 		"storage 9 15" \
 		"now_playing 13 15" \
 		# "tmux_mem_cpu_load 234 136" \
-		"weather 4 15" \
+		"fastweather 4 15" \
 		"battery 1 15 80" \
 		# "rainbarf 0 0" \
 		"xkb_layout 6 15 80" \

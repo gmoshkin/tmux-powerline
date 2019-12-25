@@ -74,6 +74,8 @@ run_segment() {
 		return 2
 	fi
 
+	__count_gmail
+	return 0
 	local count
 	case "$TMUX_POWERLINE_SEG_MAILCOUNT_MAILBOX_TYPE" in
 		"apple_mail")  count=$(__count_apple_mail) ;;
@@ -90,9 +92,9 @@ run_segment() {
 		return $exitcode
 	fi
 
-	if [[ -n "$count"  && "$count" -gt 0 ]]; then
-		echo "✉ ${count}"
-	fi
+	# if [[ -n "$count"  && "$count" -gt 0 ]]; then
+	# 	echo "✉ ${count}"
+	# fi
 
 	return 0
 }
@@ -143,6 +145,7 @@ __count_gmail() {
 		echo -e "user=${TMUX_POWERLINE_SEG_MAILCOUNT_GMAIL_USERNAME}@${TMUX_POWERLINE_SEG_MAILCOUNT_GMAIL_SERVER}\npassword=${TMUX_POWERLINE_SEG_MAILCOUNT_GMAIL_PASSWORD}" > "$tmp_wgetrc"
 		mail=$(wget -q -O - https://mail.google.com/a/${TMUX_POWERLINE_SEG_MAILCOUNT_GMAIL_SERVER}/feed/atom --config "$tmp_wgetrc" | grep -E -m 1 -o '<fullcount>(.*)</fullcount>' | sed -e 's,.*<fullcount>\([^<]*\)</fullcount>.*,\1,g')
 		rm "$tmp_wgetrc"
+		mail=$(/home/gmoshkin/dotfiles/scripts/mail-go)
 
 		if [ "$mail" != "" ]; then
 			echo $mail > $tmp_file
